@@ -75,11 +75,30 @@
 }
 
 
+- (NSArray *)fetchAllAttributes:(NSError *__autoreleasing *)error {
+	OSStatus status = SSKeychainErrorBadArguments;
+	
+	NSMutableDictionary *query = [self query];
+	[query setObject:@YES forKey:(__bridge id)kSecReturnAttributes];
+	[query setObject:(__bridge id)kSecMatchLimitAll forKey:(__bridge id)kSecMatchLimit];
+	
+	CFTypeRef result = NULL;
+	status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
+	if (status != errSecSuccess && error != NULL) {
+		*error = [[self class] errorWithCode:status];
+		return nil;
+	}
+	
+	return (__bridge_transfer NSArray *)result;
+}
+
+
 - (NSArray *)fetchAll:(NSError *__autoreleasing *)error {
 	OSStatus status = SSKeychainErrorBadArguments;
 	
 	NSMutableDictionary *query = [self query];
 	[query setObject:@YES forKey:(__bridge id)kSecReturnAttributes];
+	[query setObject:@YES forKey:(__bridge id)kSecReturnData];
 	[query setObject:(__bridge id)kSecMatchLimitAll forKey:(__bridge id)kSecMatchLimit];
 
 	CFTypeRef result = NULL;

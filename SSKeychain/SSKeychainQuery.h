@@ -109,13 +109,25 @@ extern NSString *const kSSKeychainErrorDomain;
 ///---------------
 
 /**
+ Fetch attributes of all keychain items that match the given account, service,
+ and access group. The values of `password` and `passwordData` are ignored when fetching.
+ 
+ @param error Populated should an error occur.
+ 
+ @return An array of dictionaries that represent all matching keychain items or
+ `nil` should an error occur.
+ The order of the items is not determined.
+ */
+- (NSArray *)fetchAllAttributes:(NSError **)error;
+
+/**
  Fetch all keychain items that match the given account, service, and access
  group. The values of `password` and `passwordData` are ignored when fetching.
 
  @param error Populated should an error occur.
 
  @return An array of dictionaries that represent all matching keychain items or
- `nil` should an error occur.
+ `nil` should an error occur.  These dictionaries will contain password data.
  The order of the items is not determined.
  */
 - (NSArray *)fetchAll:(NSError **)error;
