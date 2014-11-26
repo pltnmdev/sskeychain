@@ -9,47 +9,6 @@
 #import "SSKeychainQuery.h"
 
 /**
- Error code specific to SSKeychain that can be returned in NSError objects.
- For codes returned by the operating system, refer to SecBase.h for your
- platform.
- */
-typedef NS_ENUM(OSStatus, SSKeychainErrorCode) {
-	/** Some of the arguments were invalid. */
-	SSKeychainErrorBadArguments = -1001,
-};
-
-/** SSKeychain error domain */
-extern NSString *const kSSKeychainErrorDomain;
-
-/** Account name. */
-extern NSString *const kSSKeychainAccountKey;
-
-/**
- Time the item was created.
-
- The value will be a string.
- */
-extern NSString *const kSSKeychainCreatedAtKey;
-
-/** Item class. */
-extern NSString *const kSSKeychainClassKey;
-
-/** Item description. */
-extern NSString *const kSSKeychainDescriptionKey;
-
-/** Item label. */
-extern NSString *const kSSKeychainLabelKey;
-
-/** Time the item was last modified.
-
- The value will be a string.
- */
-extern NSString *const kSSKeychainLastModifiedKey;
-
-/** Where the item was created. */
-extern NSString *const kSSKeychainWhereKey;
-
-/**
  Simple wrapper for accessing accounts, getting passwords, setting passwords, and deleting passwords using the system
  Keychain on Mac OS X and iOS.
 

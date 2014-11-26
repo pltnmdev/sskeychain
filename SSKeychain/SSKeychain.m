@@ -60,6 +60,7 @@ NSString *const kSSKeychainWhereKey = @"svce";
 	query.service = serviceName;
 	query.account = account;
 	query.password = password;
+	query.accessibilityType = SSKeychainAccessibilityType;
 	return [query save:error];
 }
 

@@ -23,6 +23,19 @@ typedef NS_ENUM(NSUInteger, SSKeychainQuerySynchronizationMode) {
 #endif
 
 /**
+ Error code specific to SSKeychain that can be returned in NSError objects.
+ For codes returned by the operating system, refer to SecBase.h for your
+ platform.
+ */
+typedef NS_ENUM(OSStatus, SSKeychainErrorCode) {
+	/** Some of the arguments were invalid. */
+	SSKeychainErrorBadArguments = -1001,
+};
+
+/** SSKeychain error domain */
+extern NSString *const kSSKeychainErrorDomain;
+
+/**
  Simple interface for querying or modifying keychain items.
  */
 @interface SSKeychainQuery : NSObject
@@ -39,6 +52,11 @@ typedef NS_ENUM(NSUInteger, SSKeychainQuerySynchronizationMode) {
 #if __IPHONE_3_0 && TARGET_OS_IPHONE
 /** kSecAttrAccessGroup (only used on iOS) */
 @property (nonatomic, copy) NSString *accessGroup;
+#endif
+
+#if __IPHONE_4_0 && TARGET_OS_IPHONE
+/** kSecAttrAccessible (only used on iOS) */
+@property (nonatomic) CFTypeRef accessibilityType;
 #endif
 
 #ifdef SSKEYCHAIN_SYNCHRONIZATION_AVAILABLE

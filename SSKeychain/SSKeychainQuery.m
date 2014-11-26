@@ -7,22 +7,8 @@
 //
 
 #import "SSKeychainQuery.h"
-#import "SSKeychain.h"
 
 @implementation SSKeychainQuery
-
-@synthesize account = _account;
-@synthesize service = _service;
-@synthesize label = _label;
-@synthesize passwordData = _passwordData;
-
-#if __IPHONE_3_0 && TARGET_OS_IPHONE
-@synthesize accessGroup = _accessGroup;
-#endif
-
-#ifdef SSKEYCHAIN_SYNCHRONIZATION_AVAILABLE
-@synthesize synchronizationMode = _synchronizationMode;
-#endif
 
 #pragma mark - Public
 
@@ -39,17 +25,18 @@
 
 	NSMutableDictionary *query = [self query];
 	[query setObject:self.passwordData forKey:(__bridge id)kSecValueData];
+	
 	if (self.label) {
 		[query setObject:self.label forKey:(__bridge id)kSecAttrLabel];
 	}
+	
 #if __IPHONE_4_0 && TARGET_OS_IPHONE
-	CFTypeRef accessibilityType = [SSKeychain accessibilityType];
-	if (accessibilityType) {
-		[query setObject:(__bridge id)accessibilityType forKey:(__bridge id)kSecAttrAccessible];
+	if (self.accessibilityType) {
+		[query setObject:(__bridge id)self.accessibilityType forKey:(__bridge id)kSecAttrAccessible];
 	}
 #endif
+	
 	status = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
-
 	if (status != errSecSuccess && error != NULL) {
 		*error = [[self class] errorWithCode:status];
 	}
@@ -90,6 +77,7 @@
 
 - (NSArray *)fetchAll:(NSError *__autoreleasing *)error {
 	OSStatus status = SSKeychainErrorBadArguments;
+	
 	NSMutableDictionary *query = [self query];
 	[query setObject:@YES forKey:(__bridge id)kSecReturnAttributes];
 	[query setObject:(__bridge id)kSecMatchLimitAll forKey:(__bridge id)kSecMatchLimit];
@@ -107,6 +95,7 @@
 
 - (BOOL)fetch:(NSError *__autoreleasing *)error {
 	OSStatus status = SSKeychainErrorBadArguments;
+	
 	if (!self.service || !self.account) {
 		if (error) {
 			*error = [[self class] errorWithCode:status];
